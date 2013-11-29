@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Web Components / Shadow DOM</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="chrome=1">
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">-->
+  <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+  <!--This one seems to work all the time, but really small on ipad-->
+  <!--<meta name="viewport" content="initial-scale=0.4">-->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="stylesheet" media="all" href="theme/font-awesome/css/font-awesome.min.css">
+  <link rel="stylesheet" media="all" href="theme/css/default.css">
+  <link rel="stylesheet" media="all" href="theme/css/app.css">
+  <link rel="stylesheet" media="all" href="theme/css/polymer.css">
+  <link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="theme/css/phone.css">
+  <base target="_blank"> <!-- This amazingness opens all links in a new tab. -->
+  <script data-main="js/slides" src="js/require-1.0.8.min.js"></script>
+</head>
+<body style="opacity: 0">
+
+<slides class="layout-widescreen">
+
+<!-- <slide class="logoslide nobackground">
+  <article class="flexbox vcenter">
+    <span><img src="images/google_developers_logo.png"></span>
+  </article>
+</slide>
+ -->
+<slide class="title-slide segue nobackground">
+  <aside class="gdbar"><img src="images/google_developers_icon_128.png"></aside>
+  <!-- The content of this hgroup is replaced programmatically through the slide_config.json. -->
+  <hgroup>
+    <h1 data-config-title><!-- populated from slide_config.json --></h1>
+    <h2 data-config-subtitle><!-- populated from slide_config.json --></h2>
+    <p data-config-presenter><!-- populated from slide_config.json --></p>
+  </hgroup>
+</slide>
+
+
+<slide id="who"    >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>about:me</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p>Hayato Ito</p>
+
+<p>Software Engineer, <img src="images/logos/google_logo.png" style="height: 30px;margin: 0;vertical-align:-8px;"> <img src="images/logos/chrome_logo.png" style="height:27px;margin:0;vertical-align:-3px;"></p>
+
+<p class="topmargin"></p>
+
+<p><i class="icon icon-inbox"></i>
+<a rel="author" href="mailto:hayato@google.com">hayato@google.com</a></p>
+<p><i class="icon icon-google-plus"></i>
+<a rel="author" href="http://google.com/+HayatoIto">google.com/+HayatoIto</a></p>
+<p><i class="icon icon-github"></i>
+<a rel="author" href="http://github.com/hayatoito">github.com/hayatoito</a></p>
+<p><i class="icon icon-twitter"></i>
+<a rel="author" href="http://twitter.com/shadow_hayato">@shadow_hayato</a>  (as a Shadow DOM spec editor)</p></article>
+ 
+</slide>
+
+<slide  class="large"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Web Components?</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>select component</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><select style="zoom: 2; border-width: 0.5px">
+  <option>Small</option>
+  <option>Medium</option>
+  <option>Large</option>
+</select></p>
+<pre class="prettyprint" data-lang="html">
+  &lt;select&gt;
+    &lt;option&gt;Small&lt;/option&gt;
+    &lt;option&gt;Medium&lt;/option&gt;
+    &lt;option&gt;Large&lt;/option&gt;
+  &lt;/select>
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>tab component</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><img src="images/trees/tabs.png" /></p></article>
+ 
+</slide>
+
+<slide id="tab-examples"    >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Building a tab component</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><div class="build flexbox vcenter centered">
+<img src="images/screenshots/tabs/jquery.png">
+<img src="images/screenshots/tabs/yui.png">
+<img src="images/screenshots/tabs/angular.png">
+<img src="images/screenshots/tabs/kendo.png">
+<img src="images/screenshots/tabs/sencha.png">
+<img src=""> <!-- intentional. holder to see all images together -->
+</div></article>
+ 
+</slide>
+
+<slide  class="nobackdrop"  data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>div, div, div...</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/screenshots/gmail.png" height="500px"/></p></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>tab component</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><img src="images/trees/tabs.png" /></p>
+<pre class="prettyprint" data-lang="HTML">
+  &lt;my-tabs&gt;
+    &lt;my-tab selected&gt;...&lt;/my-tab&gt;
+    &lt;my-tab&gt;...&lt;/my-tab&gt;
+    &lt;my-tab&gt;...&lt;/my-tab>
+  &lt;/my-tabs>
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>tab component</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><img src="images/trees/tabs.png" /></p>
+<pre class="prettyprint" data-lang="JavaScript">
+  var tabs = document.createElement('my-tabs');
+  var tab1 = document.createElement('my-tab');
+  var tab2 = document.createElement('my-tab');
+  var tab3 = document.createElement('my-tab');
+  tabs.appendChild(tab1);
+  tabs.appendChild(tab2);
+  tabs.appendChild(tab3);
+  tab1.setAttribute('selected', true);
+</pre></article>
+ 
+</slide>
+
+<slide  class="large"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Web Components</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Building blocks of Web Components</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul class="build">
+<li><a href="http://w3c.github.io/webcomponents/spec/shadow/">Shadow DOM</a><ul class="build">
+<li>DOM &amp; style <span class="bold">encapsulation</span></li>
+</ul>
+</li>
+<li><a href="http://w3c.github.io/webcomponents/spec/custom/">Custom Elements</a><ul class="build">
+<li>Create <span class="bold">new</span> HTML elements, <span class="bold">extend</span> existing DOM objects</li>
+</ul>
+</li>
+<li><a href="http://w3c.github.io/webcomponents/spec/imports/">HTML Imports</a><ul class="build">
+<li><span class="bold">Package</span> and <span class="bold">Share</span> HTML/CSS/JS.</li>
+</ul>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Mixing Components</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="HTML">
+&lt;html&gt;
+  ...
+  &lt;body&gt;
+    &lt;my-component&gt;
+      &lt;style&gt; div { color: <span class="platform">blue</span>; }&lt;/style&gt;
+      ...
+    &lt;/my-component>
+     ...
+    &lt;your-component&gt;
+      &lt;style&gt; div { color: <span class="platform">red</span> !important; }&lt;/style&gt;
+      ...
+    &lt;/your-component>
+  &lt;/body&gt;
+&lt;/html>
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>DOM - Everything is Flat</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><span class="pull-right"><img src="images/trees/dom.svg" style="height:500px"></span></p>
+<ul>
+<li><code>#id</code>, <code>.class</code></li>
+<li>getElementById()</li>
+<li>getElementsByClassName()</li>
+<li>CSS Style</li>
+</ul></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>JavaScript - a Function as a Scope</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="JavaScript">
+  var foo = 'hello';
+
+  function world() {
+    var foo= 'world';
+    console.log(foo);
+  }
+
+  world(); // (1)
+  console.log(foo);   // (2)
+</pre></article>
+ 
+</slide>
+
+<slide  class="large"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Encapsulate DOM</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Shadow DOM re-defines Elements</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="quote"><blockquote style="margin-top: 100px">
+  Any element can have an associated ordered list of zero or more node trees.
+</blockquote>
+
+<p style="padding-top: 30px; zoom: 0.8">
+  From Shadow DOM Specification - <a href="http://w3c.github.io/webcomponents/spec/shadow/#concepts">http://w3c.github.io/webcomponents/spec/shadow/#concepts</a>
+</p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/tree-of-trees-1.svg" height="550px"></p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/tree-of-trees-2.svg" height="550px"></p></article>
+ 
+</slide>
+
+<slide  class="large nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Shadow Trees</h2></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/tree-of-trees-3.svg" height="550px"></p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/tree-of-trees-4.svg" height="550px"></p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2 style="font-size:100px">Tree of Trees</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Tree of Trees</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/tree-of-trees-4.svg" height="420px" style="padding-left: 20px; padding-top: 40px"></p></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Composed Tree</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/composed-tree.svg" height="550px"></p></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>&lt;video&gt;</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="HTML">
+  &lt;video controls&gt;
+     &lt;source src=".../Chrome_ImF.mp4" /&gt;
+  &lt;/video>
+</pre>
+
+<video controls>
+   <source src="./images/trees/Chrome_ImF.mp4" />
+</video></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/video-1.svg"></p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><p><img src="images/trees/video-2.svg"></p></article>
+ 
+</slide>
+
+<slide id="shadow-dom-creating"    >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Creating Shadow DOM</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="DOM Tree">
+&lt;div id="host">
+  &lt;h1>My Title&lt;/h1>
+&lt;/div>
+</pre>
+
+<pre class="prettyprint" data-lang="JavaScript" style="clear:both">
+var host = document.querySelector('#host');
+<b>var shadow = host.<a data-tooltip-property="createShadowRoot" data-tooltip-support='["webkit"]' data-tooltip-js>createShadowRoot</a>();</b>
+<b>shadow.innerHTML = '&lt;h1>You got replaced!&lt;/h1>';</b>
+</pre>
+
+<pre class="prettyprint" data-lang="Composed tree">
+&lt;div id="host">
+    &lt;h1>You got replaced!&lt;/h1>
+&lt;/div>
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Shadow DOM: Insertion points</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="DOM Tree (Light)">
+&lt;div id="host"&gt;
+  &lt;h1 class="title"&gt;My Title&lt;/h1&gt;
+  &lt;div&gt;...amazing description...&lt;/div&gt;
+&lt;/div&gt;
+</pre>
+
+<pre class="prettyprint" data-lang="Shadow Tree">
+<b>&lt;content select=".title">&lt;/content&gt;</b>
+&lt;div&gt;You got enhanced&lt;/div&gt;
+<b>&lt;content select="div">&lt;/content&gt;</b>
+</pre>
+
+<pre class="prettyprint" data-lang="Composed Tree" style="-webkit-column-break-before: always;">
+&lt;h1 class="title"&gt;My Title&lt;/h1&gt;
+&lt;div&gt;You got enhanced&lt;/div&gt;
+&lt;div&gt;...amazing description...&lt;/div&gt;
+</b>
+</pre>
+
+</div></article>
+ 
+</slide>
+
+<slide id="shadow-dom-visualizer"    >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Shadow DOM Visualizer</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><iframe data-src="http://html5-demos.appspot.com/static/shadowdom-visualizer/index.html#body" style="border:none;height:450px;background: rgba(0, 0, 0, 0);"></iframe>
+
+<p class="centered">
+<a href="http://html5-demos.appspot.com/shadowdom-visualizer">html5-demos.com/shadowdom-visualizer</a>
+</p></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Custom Elements</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Creating Custom Elements</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="JavaScript">
+var XFooProto = <b>Object.create(HTMLElement.prototype)</b>;
+
+// Setup optional lifecycle callbacks: ready, inserted, removed.
+XFooProto.readyCallback = function() {
+  this.textContent = "I'm an x-foo!";
+};
+
+// Define its JS API.
+XFooProto.foo = function() { alert('foo() called'); };
+
+<b>var XFoo = document.<a data-tooltip-property="register" data-tooltip-support='["webkit"]' data-tooltip-js>register</a>('x-foo', {prototype: XFooProto});</b>
+//var xFoo = new XFoo();
+//var xFoo = document.createElement('x-foo');
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Using a Custom Element</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><div class="build">
+<div>
+  <p>By declaring it</p>
+<pre class="prettyprint" data-lang="HTML">
+&lt;x-foo>&lt;/x-foo>
+</pre>
+</div>
+<div>
+  <p>By creating DOM in JavaScript</p>
+<pre class="prettyprint" data-lang="JavaScript">
+var elem = document.createElement('x-foo');
+elem.addEventListener('click', function(e) {
+  <b>e.target.foo();</b> // alert 'foo() called'.
+});
+</pre>
+</div>
+<div>
+<p>By using <code>new</code></p>
+<pre class="prettyprint" data-lang="JavaScript">
+var elem = <b>new XFoo()</b>;
+document.body.appendChild(elem);
+</pre>
+</div>
+
+</div></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>HTML Imports</h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>HTML Imports</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="HTML">
+&lt;html&gt;
+  &lt;head&gt;
+    <b>&lt;link rel=&quot;import&quot; href=&quot;x-foo.html&quot;&gt;</b>
+  &lt;/head&gt;
+  &lt;body&gt;
+    <b>&lt;x-foo&gt;&lt;/x-foo&gt;</b> &lt;!-- Element definition is in x-foo.html --&gt;
+  &lt;/body&gt;
+&lt;/html&gt;
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Reusing other components</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="awesome-menu.html">
+<b>&lt;link rel="import" href="x-toolbar.html">
+&lt;link rel="import" href="menu-item.html"></b>
+// Define <b>awesome-menu</b> using x-toolbar and menu-item.
+  ...
+  &lt;template>
+    <b>&lt;x-toolbar responsive="true">
+      &lt;menu-item src="images/do.png" selected>Do&lt;/menu-item>
+      &lt;menu-item src="images/re.png">Re&lt;/menu-item>
+      &lt;menu-item src="images/mi.png">Mi&lt;/menu-item>
+    &lt;x-toolbar></b>
+  &lt;/template>
+  ...
+</pre>
+
+<pre class="prettyprint" data-lang="app.html">
+&lt;link rel="import" href="awesome-menu.html">
+&lt;awesome-menu>&lt;/awesome-menu>
+</pre></article>
+ 
+</slide>
+
+<slide  class="nobackdrop nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2><img src="images/polymer/polymer-p.png" style="height:90px;box-shadow:none;margin-right:10px;">Polymer</h2>
+
+<p><br>
+<h3><a href="http://polymer-project.org">polymer-project.org</a></h3></p></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Polymer</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><p><span class="pull-right"><img src="images/polymer/architecture-diagram.png" style="height:550px"></span></p>
+<ul class="build">
+<li>
+<p><span class="elements">Elements</span></p>
+</li>
+<li>
+<p><span class="core">Core</span></p>
+</li>
+<li>
+<p><span class="platform">Polyfill</span></p>
+</li>
+</ul></article>
+ 
+</slide>
+
+<slide  class="large nobackground yum"   >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2></h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2>Everything is an element</h2></article>
+ 
+</slide>
+
+<slide id="polymer-flex-demo"   data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Everything is an element</h2>
+      <h3>flexbox layout...using DOM</h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="HTML">
+&lt;polymer-flex-layout <b data-action="vertical">vertical</b> <b>iscontainer</b>>
+  &lt;div>Header&lt;/div>
+  &lt;div <b data-action="flex">flex</b>>Body&lt;/div>
+  &lt;div>Footer&lt;/div>
+&lt;/polymer-flex-layout>
+</pre>
+
+<div class="component-demo" style="height:100%">
+  <polymer-flex-layout>
+    <div class="flex-demo">Header</div>
+    <div class="flex-demo"style="height:100px">Body</div>
+    <div class="flex-demo">Footer</div>
+  </polymer-flex-layout>
+</div></article>
+ 
+</slide>
+
+<slide    data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Polymer elements</h2>
+      <h3>non-visual utility elements</h3>
+    </hgroup>
+    <article class="columns-2"><p><span class="bold blue">Layout</span></p>
+<p><code>&lt;polymer-layout&gt;</code></p>
+<p><code>&lt;polymer-flex-layout&gt;</code></p>
+<p><code>&lt;polymer-grid-layout&gt;</code></p>
+<p><span class="bold blue">View</span></p>
+<p><code>&lt;polymer-media-query&gt;</code></p>
+<p><code>&lt;polymer-page&gt;</code></p>
+<p><span class="bold blue">Services / libs</span></p>
+<p><code>&lt;polymer-shared-lib&gt;</code></p>
+<p><span class="bold blue">Data</span></p>
+<p><code>&lt;polymer-localstorage&gt;</code></p>
+<p><code>&lt;polymer-xhr&gt;</code></p>
+<p><code>&lt;polymer-jsonp&gt;</code></p>
+<p><code>&lt;polymer-file&gt;</code></p>
+<p><code>&lt;polymer-meta&gt;</code></p>
+<p><span class="bold blue">Behavior / interaction</span></p>
+<p><code>&lt;polymer-signals&gt;</code></p>
+<p><code>&lt;polymer-selector&gt;</code></p></article>
+ 
+</slide>
+
+<slide id="polymer-ui-elements"   data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Polymer UI elements</h2>
+      <h3>visual elements</h3>
+    </hgroup>
+    <article ><div class="pull-right flexbox vcenter" style="width: 40%;margin-top:-100px;">
+  <img src="images/polymer/uielements/polymer-ui-tabs.png" style="width:100%">
+  <div class="flexbox vcenter" style="height:auto;">
+  <img src="images/polymer/uielements/sidebarmenu.png">
+  <img src="images/polymer/uielements/polymer-ui-toggle-button.png" style="margin-left:20px;">
+  </div>
+  <img src="images/polymer/uielements/toolbar.png" style="width:100%">
+</div>
+
+<p><code>&lt;polymer-ui-accordion&gt;</code></p>
+<p><code>&lt;polymer-ui-animated-pages&gt;</code></p>
+<p><code>&lt;polymer-ui-overlay&gt;</code></p>
+<p><code>&lt;polymer-ui-card&gt;</code> <a href="http://www.polymer-project.org/polymer-all/polymer-ui-elements/polymer-ui-card/index.html">demo</a></p>
+<p><code>&lt;polymer-ui-sidebar-menu&gt;</code> <a href="http://www.polymer-project.org/polymer-all/polymer-ui-elements/polymer-ui-sidebar-menu/index.html">demo</a></p>
+<p><code>&lt;polymer-ui-tabs&gt;</code> <a href="http://www.polymer-project.org/polymer-all/polymer-ui-elements/polymer-ui-tabs/index.html">demo</a></p>
+<p><code>&lt;polymer-ui-toggle-button&gt;</code> <a href="http://www.polymer-project.org/polymer-all/polymer-ui-elements/polymer-ui-toggle-button/index.html">demo</a></p>
+<p><code>&lt;polymer-ui-theme-aware&gt;</code></p>
+<p>...</p></article>
+ 
+</slide>
+
+<slide    data-body-class="core-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Create Web Components with Polymer.</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ol>
+<li>
+<p>Create</p>
+<p><pre class="prettyprint" data-lang="HTML">
+&lt;polymer-element <b>name="my-input"</b> <b>constructor="MyInput"</b> <b data-tooltip="Simple elements that don't call Polymer()">noscript</b>&gt;
+  &lt;!-- Note: Polymer creates Shadow DOM from the first &lt;template&gt;. --&gt;
+  <b>&lt;template&gt;
+    &lt;style&gt;input { color: orange; }&lt;/style&gt;
+    &lt;input type="text"&gt;
+  &lt;/template&gt;</b>
+&lt;/polymer-element&gt;
+</pre></p>
+</li>
+<li>
+<p>Use</p>
+<p><pre class="prettyprint" data-lang="HTML">
+    &lt;my-input&gt;&lt;/my-input&gt;
+</pre></p>
+<p><pre class="prettyprint" data-lang="JavaScript">
+    var myInput = document.createElement('my-input');
+    // var myInput = new MyInput();
+</pre></p>
+</li>
+</ol></article>
+ 
+</slide>
+
+<slide  class="nobackdrop"  data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Real-world examples</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2 style="margin-top:-100px;"><a href="http://www.chromestatus.com/features">chromestatus.com/features</a></h2></article>
+ 
+</slide>
+
+<slide  class="nobackdrop"  data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>A Collection of Custome Elements</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2 style="margin-top:-100px;"><a href="http://customelements.io/">customelements.io</a></h2></article>
+ 
+</slide>
+
+<slide  class="nobackdrop"  data-body-class="elements-bg" >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Polymer Sandbox</h2>
+      <h3></h3>
+    </hgroup>
+    <article class="flexbox vcenter centered"><h2 style="margin-top:-100px;"><a href="http://www.polymer-project.org/tools/sandbox/">www.polymer-project.org/tools/sandbox/</a></h2></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Web Apps: A Collection of Web Components</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><pre class="prettyprint" data-lang="HTML">
+&lt;html&gt;
+  &lt;head&gt;
+     &lt;link rel="import" href="gmail-app.html"&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;google-header&gt;&lt;/google-header&gt;
+    &lt;gmail-app&gt;
+      &lt;google-hangout&gt;&lt;/google-hangout&gt;
+      &lt;google-mail&gt;&lt;/google-mail&gt;
+    &lt;/gmail-app&gt;
+  &lt;/body&gt;
+&lt;/html>
+</pre></article>
+ 
+</slide>
+
+<slide     >
+  
+    <hgroup>
+      <span>
+        
+        
+        
+        
+      </span>
+      <h2>Resources</h2>
+      <h3></h3>
+    </hgroup>
+    <article ><ul>
+<li>
+<p>Web Components Resources - <a href="http://ebidel.github.io/webcomponents/">ebidel.github.io/webcomponents/</a></p>
+</li>
+<li>
+<p>Shadow DOM - <a href="http://github.io/w3c/webcomponents/specs/shadow/">github.io/w3c/webcomponents/specs/shadow/</a></p>
+</li>
+<li>
+<p>Polymer - <a href="http://www.polymer-project.org">www.polymer-project.org</a></p>
+</li>
+<li>
+<p>Me - Ask <a href="http://twitter.com/shadow_hayato">@shadow_hayato</a></p>
+</li>
+</ul></article>
+ 
+</slide>
+
+
+<slide class="thank-you-slide segue nobackground">
+  <article class="flexbox vleft auto-fadein">
+    <h2>Thank You!</h2>
+    <p>アンケートにご協力ください</p>
+    <p></p>
+    <h2><a herf="http://bit.ly/html5C201311">http://bit.ly/html5C201311</a></h2>
+    <p>
+      アンケートへ答えた方へもれなく記念品プレゼント。<br/>
+      アンケートの完了画面を1F受付にてご提示ください
+    </p>
+    <p>
+      [お知らせ] 最終スペシャルセッションの開始時刻が変更になりました <br/>(18:30 -> 18:20)。10分早まっています。ご注意ください。
+    </p>
+  </article>
+</slide>
+
+<slide class="backdrop"></slide>
+
+</slides>
+
+</body>
+</html>

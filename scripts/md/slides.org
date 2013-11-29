@@ -1,0 +1,365 @@
+
+* Web Components / Shadow DOM
+
+* 自己紹介
+
+Google で働くソフトウェア・エンジニア。
+Google Chrome の開発。
+主に Shadow DOM の デザインと実装。
+
+hayato@google.com
+google.com/+HayatoIto
+github.com/hayatoito
+twitter.com/shadow_hayato
+http://w3c.github.io/webcomponents/spec/shadow/
+
+
+* Web Components
+
+我々がつくろうとしている世界です。
+
+ブラウザがネイティブにコンポーネントをサポートする。
+JavaScript のレベルではなく (<- ここ重要)
+
+コンポーネントってなに？
+
+タグです。
+
+
+Web Components.
+
+
+答えは、
+
+
+
+<div class="note">
+  <span class="green"><b>A collection of new API primitives in the browser</b></span>
+</p>
+
+<div class="note">
+混ぜるな危険。
+こんちに、CSS Framework を混ぜて使おうと思う人はいないはず。悲劇がまってる。
+</div>
+
+<div class="note">
+  エレメントは、"ゼロ個以上任意個"の、隠されたノードツリー（Shadow Trees）を内部に持つことができる。
+</div>>
+
+
+<div class="note">
+  // original: http://www.html5rocks.com/en/tutorials/video/basics/Chrome_ImF.mp4
+</div>
+
+
+<div class="note">
+- `document.register()` takes the tag name and description `prototype`:
+</div>
+
+
+<div class="note">
+  <p>By <b>using <code>new</code></b> (if the <code>constructor</code> attribute was defined)</p>
+</div>
+
+<span class="note">
+  Polymer is a <span class="blue">new type of library</span> for the web, built on top of <span class="platform">Web Components</span>, and designed to leverage the <span class="core">evolving web platform</span> &#8230; on <b>modern browsers</b>.
+</span>
+
+<div class="note">
+    Sugaring layer - Web Components 技術をまとめて使えるようにするレイヤー。
+    Polyfill - Shadow DOM, Custom Elements, HTML Imports
+</div>
+
+<div class="note">
+ Instantiate - **declare** it, **create DOM**, or **use `new`** in JS
+</div>
+
+
+
+* ブラウザに標準で用意されている"コンポーネント"
+
+<select>
+  <option>1</option>
+  <option>2</option>
+  <option>3</option>
+</select>
+
+
+* ブラウザに標準で用意されていない場合は?
+
+
+<tab>
+</tab>
+
+JavaScript.
+Div. Div. Div
+
+* Gmail.
+
+成れの果てがこれ。
+
+GMail loves div.
+   source.
+
+* Your Components
+
+<my-component hello='a'>
+  <sub-component>Foo1</sub-component>
+  <sub-component>Foo1</sub-component>
+</my-components>
+
+* Gmail
+
+<gmail-app>
+</gmail-app>
+
+
+(div, div, div でエミュレートする）
+
+Everything is Element.
+
+* Native
+
+var div = document.createElement('div');
+var gmail = document.createElement('gmail-app');
+var myComponent = document.createElement('my-component');
+
+var subComponent = document.creatElement('sub-component');
+
+var myComponent = new MyComponent();
+
+
+* どうやって Web Components を利用する？
+
+<link import="..../cool-webcomponents"/>
+
+<cool-webcomponent>
+</cool-webcompnent>
+
+* どうやって Web Components をつくる？
+
+1枚で説明すると:
+
+
+* 技術的なお話
+
+
+コンポーネントのなかで <style> とかタグ使ってやばくない？
+
+
+
+Web アプリを壊すのは簡単♡
+
+  <style>* { color: red; }</style>
+
+デザイナーを泣かすのは簡単で:
+
+* DOM ツリー
+
+最終的には どんなページも、DOMツリー からできあがっている。
+
+
+ひとつの名前空間を共有する。
+
+- #id
+- $('.myclass')
+
+- どんなエレメントにも容易にアクセスできる
+- （できてしまう）。
+
+DOM -Tree スコープ は一個。
+
+<div>
+  <div>
+    <div>
+    ...
+  </div>
+</div>
+
+* このままだと:
+
+<div>
+  <my-component>
+      <style>* { color: red }
+  </my-component>
+
+  <your-component>
+      <p>hello</p>
+  </you-component>
+</div>
+
+* スコープ
+
+今日、まともなプログラミング言語なら、"スコープ"の概念がある。
+
+var foo = 'hello';
+
+function func1() {
+  var foo = 'world';
+  console.log(foo);
+}
+
+func(); // (1)
+console.log(foo);   // (2)
+
+
+* DOM ツリーにはない。
+
+Web Components の実現にあたって大きな壁。
+それぞれのコンポーネント間で、用意に干渉してします。
+
+
+* Shadow Trees.
+
+DOM ツリーを2次元から3次元に拡張する。
+
+>Shadow DOM spec.
+
+"Any element can have an associated ordered list of zero or more node trees."
+
+
+* Shadow Trees
+
+それぞれのエレメンtが隠された'Tree', Shadow Tree, を持てるようになる。
+
+表にでてくることのない隠れたTree。
+通常の手段ではアクセスできない。それぞれが独立したツリー。
+
+
+* Go deeper.
+
+Any elemet
+
+Shadow Tree の中のエレメントも、Shadow Tree ももてる。
+
+ネストの回数に制限はない。
+
+
+* 2次元の住民には別の次元のTreeは'見えない'.
+
+それぞれのTreeはこれまでのTreeのように振る舞う。
+
+CSS selector, getElementByClassName() などは、それぞれのTree内のみ。
+
+
+* <video> エレメント
+
+実は、Shadow Tree を持っている。
+
+
+これを支える技術が、Shadow DOM。
+
+すでに、Chrome のいくつかの Built-in Element は、Shadow DOM で実現されている。
+
+しかし、Web 開発者には「ばれていない」。カプセル化のおかげ。
+
+* Composed Tree.
+
+A tree of trees -> Composed tree.
+
+=> Distribution algorithm.
+
+
+
+* Shadow DOM と オブジェクト指向
+
+もっと混乱させてあげましょう。（覚えなくてもいいと思う。でも重要）
+  ある、Shadow Host はひとつだけでなく、ゼロ個以上任意個の Shadow Tree をホストできます
+  オブジェクト指向における、多段継承の影響を受けています。
+
+  Shadow Tree の 子供エレメントは --> コンストラクタのパラメータ
+  Shadow Tree の <shadow> element - スーパークラスへのコンストラクタコールと同じように振る舞います。コンセプト的にはね。
+
+  Shadow DOM のデザインをする上で、オブジェクト指向を強く意識しています。
+
+
+* カプセル化のお陰で
+
+Polymer デモ。
+
+* 現状。
+
+ Mozilla - Shadow Root.
+ ちょうど先週、when@mozzila.com と #whatwg で話したばかり。私もいまアドバイスしてます。
+ 現在パッチレビュー中。
+
+ IE twitter. Web Components are tring to solve hard problem
+
+* トレンド
+
+Ajax:
+
+JavaScript and JSON: クライアント・サイド・テンプレートの流れが加速。
+
+2013 - Web Components。
+
+    今回は、我々は、初めて、意識的に未来をつくっています。
+
+*
+
+良いニュースがあります
+
+前半部分、忘れていいです。
+
+そう、Polymer を使えばね。ごめんなさい、難しい話をして。
+
+* Polymer デモ
+
+あなた自身のPolymerを作ってもいいですよ。 Shadow DOM 自体は Polymer を支える要素技術のひとつ。
+
+真のカプセル化。
+
+> 小手先のテクニックではなく、真にDOMレベルでのカプセル化
+
+* FAQ.
+
+みんな挑戦して敗れていった。XBL2.
+
+みんな、上位レイヤーで解決すること。
+
+しかし、本来、DOM レベルでできたら、かっこいいし、みんなハッピー。
+
+しかし、難しいのはわかってる。
+  --> とっても難しい問題です。しかし、我々は本気です。
+
+でも、「我々、ブラウザつくってるよね？我々がやらないでいったい誰がやる？」
+
+もっと、作り方知りたい。 -> Go http://polymer.org/
+
+* I have a dream.
+
+Web アプリケーションがもっと、コンポーネントを
+
+
+* 妄想
+
+Define every elements behavior in the context of Web Components.
+
+全ての要素が、実は、Web Components で実現されていると考えることができたら？
+<table> エレメントの挙動を、Web Components で説明することに成功したらどうなる？
+
+DOM 仕様、HTML 仕様、全てを揺るがすことができる。大きな Changeです。
+
+「ここは、Google だ。Moon shot を考えるのが我々の仕事だ。」
+
+User Interfaces as Service.
+
+進化を続けてないプロットフォームは必ず消え去る。歴史が証明している。
+
+Web も現状の地位に甘えているわけにはいかない。
+
+
+Web が好きだし、Web に関わる人の想像力が大好き。
+
+プラットフォームとしての Web が負ける姿は見たくない。
+全力でWebを進化させます。
+
+* でもこれは約束じゃないからね。今後も地道に証明あるのみ。
+
+* Links.
+
+http://github.com/hayatoito/webcomponents-slides
+
+* 謝辞:
+
+@myakura さんありがとう。
